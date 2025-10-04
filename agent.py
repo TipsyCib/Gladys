@@ -41,6 +41,11 @@ class Agent:
         # Prepare messages with system prompt
         api_messages = [{"role": "system", "content": self.system_prompt}] + messages
 
+        # Debug: print messages being sent
+        #print(f"[DEBUG] Sending {len(api_messages)} messages to API")
+        #for i, msg in enumerate(api_messages[-3:]):  # Last 3 messages
+            #print(f"[DEBUG] Message {i}: role={msg.get('role')}, content={msg.get('content', '')[:50]}...")
+
         # Call Mistral API with tools
         response = self.client.chat.complete(
             model=self.model,
@@ -99,8 +104,8 @@ class Agent:
             final_message = final_response.choices[0].message
             final_content = final_message.content or ""
 
-            # Only append assistant message if there's content or tool calls
-            if final_content or final_message.tool_calls:
+            # Only append assistant message if there's actual content
+            if final_content:
                 messages.append({"role": "assistant", "content": final_content})
 
             return messages, final_content

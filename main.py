@@ -80,7 +80,7 @@ def main():
             # Process message with agent
             try:
                 messages, response = agent.process_message(messages, user_input)
-                print(f"\nAssistant: {response}\n")
+                print(f"\nGladys: {response}\n")
 
                 # Save after each interaction
                 save_memory(messages)

@@ -9,12 +9,25 @@ PROJECT_DIR = Path(__file__).parent
 MEMORY_FILE = PROJECT_DIR / "memory.json"
 PROMPTS_FILE = PROJECT_DIR / "prompts.yaml"
 
+# Services paths
+
+GOOGLE_GMAIL_ACCESS_CREDENTIALS = PROJECT_DIR / "credentials/google/gmail/access_gmail_credentials.json"
+GOOGLE_GMAIL_ACCESS_TOKEN = PROJECT_DIR / "credentials/google/gmail/access_mail_token.json"
+
+GOOGLE_CONTACTS_CREDENTIALS = PROJECT_DIR / "credentials/google/contacts/contacts_credentials.json"
+GOOGLE_CONTACTS_TOKEN = PROJECT_DIR / "credentials/google/contacts/get_contacts_token.json"
+GOOGLE_ADD_CONTACTS_TOKEN = PROJECT_DIR / "credentials/google/contacts/add_contacts_token.json"
+
 # Load environment variables from .env file
 load_dotenv(PROJECT_DIR / ".env")
 
 # Mistral API configuration
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
 MISTRAL_MODEL = "mistral-small-latest"  # Supports function calling
+
+# Gmail API configuration
+GMAIL_MAIL_USER = os.getenv("GMAIL_MAIL_USER", "")
+GMAIL_MAIL_TEST_RECIPIENT = os.getenv("GMAIL_MAIL_TEST_RECIPIENT", "")
 
 # Memory management
 MEMORY_THRESHOLD_KB = 50  # Threshold to trigger summarization

@@ -12,3 +12,14 @@ dev/
 *.pdf
 # memory files
 memory.json
+
+# .rd files
+PLAN.md
+README.md
+
+# 
+credentials/google/gmail/*
+!credentials/google/gmail/.gitkeep
+
+credentials/google/contacts/*
+!credentials/google/contacts/.gitkeep

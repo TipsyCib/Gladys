@@ -2,26 +2,13 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict
+from services.google.gmail.access_mail_gmail import access_gmail
+from services.google.gmail.write_mail_gmail import extract_email_details, send_email_from_draft
+from services.google.contacts.get_google_contacts import get_google_contacts
+from services.google.contacts.add_google_contacts import add_google_contacts
 
 
 # Tool implementations
-
-def write_to_file(filename: str, content: str) -> str:
-    """Write content to a file.
-
-    Args:
-        filename: Name of the file to write to
-        content: Content to write to the file
-
-    Returns:
-        Success message or error description
-    """
-    try:
-        filepath = Path(filename)
-        filepath.write_text(content)
-        return f"Successfully wrote to {filename}"
-    except Exception as e:
-        return f"Error writing to file: {str(e)}"
 
 
 def get_date() -> str:
@@ -35,34 +22,17 @@ def get_date() -> str:
 
 # Tool registry mapping tool names to functions
 TOOL_FUNCTIONS: Dict[str, Callable] = {
-    "write_to_file": write_to_file,
     "get_date": get_date,
+    "access_gmail": access_gmail,
+    "send_mail_gmail": send_email_from_draft,
+    "get_google_contacts": get_google_contacts,
+    "add_google_contacts": add_google_contacts
+
 }
 
 
 # Tool schemas for Mistral API (following OpenAI function calling format)
 TOOL_SCHEMAS = [
-    {
-        "type": "function",
-        "function": {
-            "name": "write_to_file",
-            "description": "Write content to a file in the current directory",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "filename": {
-                        "type": "string",
-                        "description": "The name of the file to write to"
-                    },
-                    "content": {
-                        "type": "string",
-                        "description": "The content to write to the file"
-                    }
-                },
-                "required": ["filename", "content"]
-            }
-        }
-    },
     {
         "type": "function",
         "function": {
@@ -72,6 +42,75 @@ TOOL_SCHEMAS = [
                 "type": "object",
                 "properties": {},
                 "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "access_gmail",
+            "description": "Access Gmail to read emails",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "send_mail_gmail",
+            "description": "Send an email using a draft text",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "draft": {
+                        "type": "string",
+                        "description": (
+                            "Draft email text containing recipient, subject, and body. "
+                            "Format should include 'A : <recipient>', 'Objet : <subject>', and 'Corps : <body>'."
+                        )
+                    }
+                },
+                "required": ["draft"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_google_contacts",
+            "description": "Retrieve Google Contacts to find email addresses. MUST be called before sending an email to get the recipient's email address.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "add_google_contacts",
+            "description": "Add a new contact to Google Contacts",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the contact"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email address of the contact"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Phone number of the contact (optional)"
+                    }
+                },
+                "required": ["name", "email"]
             }
         }
     }
