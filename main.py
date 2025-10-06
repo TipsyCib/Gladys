@@ -21,7 +21,7 @@ Just type your message to chat with the agent!
 def main():
     """Main CLI chat loop."""
     print("=" * 60)
-    print("  Simple Agentic CLI Chatbot")
+    print("  Gladys CLI")
     print("  Powered by Mistral AI")
     print("=" * 60)
     print("\nType /help for commands, /exit to quit\n")

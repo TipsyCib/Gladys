@@ -20,17 +20,26 @@ def authenticate_google():
 
     # Charger les identifiants existants si disponibles
     if os.path.exists(token_file):
-        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
-        print("Utilisation des identifiants existants")
+        try:
+            creds = Credentials.from_authorized_user_file(token_file, SCOPES)
+            print("Utilisation des identifiants existants")
 
-        # Rafraîchir le token s'il est expiré
-        if creds.expired and creds.refresh_token:
-            print("Rafraîchissement du token expiré")
-            creds.refresh(Request())
-            with open(token_file, "w") as token:
-                token.write(creds.to_json())
-    else:
-        print("Aucun token existant trouvé. Démarrage du processus d'authentification...")
+            # Rafraîchir le token s'il est expiré
+            if creds.expired and creds.refresh_token:
+                print("Rafraîchissement du token expiré")
+                creds.refresh(Request())
+                with open(token_file, "w") as token:
+                    token.write(creds.to_json())
+                print("Token rafraîchi avec succès")
+        except Exception as e:
+            print(f"Erreur lors du rafraîchissement du token: {e}")
+            print("Suppression du token invalide et réauthentification...")
+            os.remove(token_file)
+            creds = None
+
+    # Si pas de credentials valides, réauthentifier
+    if creds is None or not creds.valid:
+        print("Démarrage du processus d'authentification...")
         flow = InstalledAppFlow.from_client_secrets_file(
             credentials_file, SCOPES, redirect_uri='http://localhost:8080'
         )

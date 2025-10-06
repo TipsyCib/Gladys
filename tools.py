@@ -6,6 +6,7 @@ from services.google.gmail.access_mail_gmail import access_gmail
 from services.google.gmail.write_mail_gmail import extract_email_details, send_email_from_draft
 from services.google.contacts.get_google_contacts import get_google_contacts
 from services.google.contacts.add_google_contacts import add_google_contacts
+from services.browser.browser_agent import execute_browser_task
 
 
 # Tool implementations
@@ -26,7 +27,9 @@ TOOL_FUNCTIONS: Dict[str, Callable] = {
     "access_gmail": access_gmail,
     "send_mail_gmail": send_email_from_draft,
     "get_google_contacts": get_google_contacts,
-    "add_google_contacts": add_google_contacts
+    "add_google_contacts": add_google_contacts,
+    "execute_browser_task": execute_browser_task
+
 
 }
 
@@ -81,7 +84,7 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "get_google_contacts",
-            "description": "Retrieve Google Contacts to find email addresses. MUST be called before sending an email to get the recipient's email address.",
+            "description": "Retrieve all Google Contacts to find email addresses. MUST be called when the user mentions a contact by NAME (not email address) to get their email before sending a message. Always call this first when user says 'dis à X', 'envoie à X', 'contacte X' where X is a person's name.",
             "parameters": {
                 "type": "object",
                 "properties": {},
@@ -113,7 +116,29 @@ TOOL_SCHEMAS = [
                 "required": ["name", "email"]
             }
         }
-    }
+    },
+
+    {
+                "type": "function",
+                "function": {
+                    "name": "execute_browser_task",
+                    "description": "Exécute une tâche automatisée dans un navigateur web en utilisant Browser Use avec Gemini. Utilise cette fonction quand l'utilisateur demande d'aller sur un site, chercher des informations, remplir des formulaires, ou toute action nécessitant un navigateur.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_description": {
+                                "type": "string",
+                                "description": "Description détaillée et précise de la tâche à accomplir dans le navigateur. Doit inclure les URLs, les étapes exactes, et ce qu'il faut chercher ou faire."
+                            },
+                            "expected_result": {
+                                "type": "string",
+                                "description": "Ce que l'utilisateur attend comme résultat (ex: 'trouver le prix', 'télécharger le fichier', 'récupérer les informations')"
+                            }
+                        },
+                        "required": ["task_description", "expected_result"]
+                    }
+                }
+            }
 ]
 
 
