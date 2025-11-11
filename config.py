@@ -25,6 +25,9 @@ load_dotenv(PROJECT_DIR / ".env")
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
 MISTRAL_MODEL = "mistral-small-latest"  # Supports function calling
 
+# ElevenLabs API configuration (for text-to-speech)
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
+
 # Gmail API configuration
 GMAIL_MAIL_USER = os.getenv("GMAIL_MAIL_USER", "")
 GMAIL_MAIL_TEST_RECIPIENT = os.getenv("GMAIL_MAIL_TEST_RECIPIENT", "")
