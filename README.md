@@ -1,6 +1,6 @@
-# Gladys - Agentic CLI Assistant
+# Gladys - Agentic Assistant
 
-An intelligent conversational agent powered by Mistral AI with function calling, persistent memory, and real-world service integrations.
+An intelligent conversational agent powered by Mistral AI with function calling, persistent memory, and real-world service integrations. Available as both a CLI and Web GUI interface.
 
 ## 🌟 Features
 
@@ -9,6 +9,8 @@ An intelligent conversational agent powered by Mistral AI with function calling,
 - **Persistent Memory**: JSON-based conversation history with automatic summarization
 - **Smart Context Management**: Auto-compresses memory when size threshold is reached
 - **Service Integrations**: Gmail, Google Contacts, and browser automation
+- **Dual Interface**: CLI for terminal use, Web GUI (Gradio) for browser-based interaction
+- **Voice Features**: Speech recognition (Whisper) and text-to-speech (ElevenLabs)
 
 ### Available Tools
 - 📅 **Date/Time**: Get current date in readable format
@@ -21,9 +23,11 @@ An intelligent conversational agent powered by Mistral AI with function calling,
 ### Prerequisites
 - Python 3.8+
 - Mistral API key
+- (Optional) ElevenLabs API key for text-to-speech
 - (Optional) Node.js & npm for browser automation
 - (Optional) Google API credentials for Gmail/Contacts
 - (Optional) Gemini API key for browser automation
+- (Optional) PyAudio for voice input (microphone recording)
 
 ### Installation
 
@@ -38,6 +42,7 @@ pip install -r requirements.txt
 
 # Add your API keys to .env:
 MISTRAL_API_KEY=your_mistral_api_key_here
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here  # For text-to-speech
 GEMINI_API_KEY=your_gemini_api_key_here  # For browser automation
 GMAIL_MAIL_USER=your_email_adress
 ```
@@ -58,16 +63,33 @@ npm install -g browser-use
 
 ### Run Gladys
 
+**CLI Mode:**
 ```bash
 python main.py
 ```
 
+**Web GUI Mode (Gradio):**
+```bash
+python main_gui.py
+```
+The Gradio interface will launch at `http://localhost:7860` with a public share link.
+
 ## 💬 Usage
 
-### Basic Commands
+### CLI Mode Commands
 - `/help` - Show available commands
 - `/clear` - Clear conversation history
 - `/exit` or `/quit` - Exit the chatbot
+- `/voice` - Enable voice input mode (requires Whisper)
+- `/text` - Enable text input mode
+
+### Web GUI Mode (Gradio)
+The Gradio interface provides:
+- **Text Mode Tab**: Type messages and get responses
+- **Voice Mode Tab**: Record audio (3-10 seconds) for speech recognition
+- **Voice Output Toggle**: Enable/disable text-to-speech responses
+- **Clear History Button**: Reset conversation
+- **Persistent Chat**: Conversation history loads automatically
 
 ### Example Interactions
 
@@ -95,20 +117,25 @@ Gladys: Found the following contact info: ...
  
 ```
 your-folder/
-├── main.py           # CLI entry point and chat loop
-├── agent.py          # Mistral API client with function calling
-├── tools.py          # Tool registry and execution
-├── memory.py         # Conversation persistence and compression
-├── config.py         # Configuration management
-├── prompts.yaml      # System prompts and templates
-├── .env              # API keys (not in git)
-├── memory.json       # Auto-generated conversation history
-└── services/         # Service integrations
+├── main.py                  # CLI entry point and chat loop
+├── main_gui.py      # Web GUI interface with Gradio
+├── agent.py                 # Mistral API client with function calling
+├── tools.py                 # Tool registry and execution
+├── memory.py                # Conversation persistence and compression
+├── config.py                # Configuration management
+├── prompts.yaml             # System prompts and templates
+├── .env                     # API keys (not in git)
+├── memory.json              # Auto-generated conversation history
+└── services/                # Service integrations
     ├── browser/
     │   └── browser_agent.py
     └── google/
         ├── gmail/
+        │   ├── access_mail_gmail.py
+        │   └── write_mail_gmail.py
         └── contacts/
+            ├── get_google_contacts.py
+            └── add_google_contacts.py
 ```
 
 ## 🔧 Configuration
@@ -181,7 +208,8 @@ Current test coverage:
 - **Phase 1** ✅: Core chatbot with tools and memory
 - **Phase 1.5** ⏳: IoT control (Tapo smart bulbs)
 - **Phase 2** ✅: Service integrations (Gmail, Contacts, Browser)
-- **Phase 3** ⏳: Voice interface (STT/TTS)
+- **Phase 3** ✅: Voice interface (STT/TTS) - Whisper + ElevenLabs
+- **Phase 3.5** ✅: Web GUI with Gradio
 - **Phase 4** ⏳: Animated character with emotions
 
 See [PLAN.md](PLAN.md) for detailed roadmap.
