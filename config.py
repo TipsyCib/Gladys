@@ -32,6 +32,11 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
 GMAIL_MAIL_USER = os.getenv("GMAIL_MAIL_USER", "")
 GMAIL_MAIL_TEST_RECIPIENT = os.getenv("GMAIL_MAIL_TEST_RECIPIENT", "")
 
+# Tapo configuration
+TAPO_USERNAME = os.getenv("TAPO_USERNAME", "")
+TAPO_PASSWORD = os.getenv("TAPO_PASSWORD", "")
+TAPO_IP_ADDRESS = os.getenv("TAPO_IP_ADDRESS", "")
+
 # Memory management
 MEMORY_THRESHOLD_KB = 50  # Threshold to trigger summarization
 MEMORY_KEEP_LAST_N = 10   # Keep last N messages after summarization
