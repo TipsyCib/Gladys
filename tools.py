@@ -72,7 +72,7 @@ TOOL_SCHEMAS = [
                         "type": "string",
                         "description": (
                             "Draft email text containing recipient, subject, and body. "
-                            "Format should include 'A : <recipient>', 'Objet : <subject>', and 'Corps : <body>'."
+                            "Format should include 'To : <recipient>', 'Subject : <subject>', and 'Body : <body>'."
                         )
                     }
                 },
