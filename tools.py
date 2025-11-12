@@ -1,4 +1,5 @@
 """Tool definitions and execution for the agentic chatbot."""
+import asyncio
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict
@@ -7,6 +8,7 @@ from services.google.gmail.write_mail_gmail import extract_email_details, send_e
 from services.google.contacts.get_google_contacts import get_google_contacts
 from services.google.contacts.add_google_contacts import add_google_contacts
 from services.browser.browser_agent import execute_browser_task
+from services.light.control_light import control_lampe
 
 
 # Tool implementations
@@ -28,7 +30,8 @@ TOOL_FUNCTIONS: Dict[str, Callable] = {
     "send_mail_gmail": send_email_from_draft,
     "get_google_contacts": get_google_contacts,
     "add_google_contacts": add_google_contacts,
-    "execute_browser_task": execute_browser_task
+    "execute_browser_task": execute_browser_task,
+    "control_light": control_lampe,
 
 
 }
@@ -138,7 +141,35 @@ TOOL_SCHEMAS = [
                         "required": ["task_description", "expected_result"]
                     }
                 }
+            },
+
+    {
+        "type": "function",
+        "function": {
+            "name": "control_light",
+            "description": "Contrôle une lampe intelligente Tapo (allumer, éteindre, changer la luminosité ou la couleur)",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "enum": [
+                            "on", "off",
+                            "brightness_min", "brightness_moyenne", "brightness_max", "brightness_porcentage",
+                            "color_indigo", "color_blue", "color_rouge", "color_violet",
+                            "color_vert", "color_rose", "color_white", "color_warm"
+                        ],
+                        "description": "L'action à effectuer sur la lampe"
+                    },
+                    "value": {
+                        "type": "integer",
+                        "description": "Valeur de luminosité en pourcentage (1-100), uniquement pour brightness_porcentage"
+                    }
+                },
+                "required": ["action"]
             }
+        }
+    }
 ]
 
 
@@ -157,7 +188,15 @@ def execute_tool(tool_name: str, tool_args: Dict[str, Any]) -> str:
 
     try:
         tool_func = TOOL_FUNCTIONS[tool_name]
-        result = tool_func(**tool_args)
+
+        # Check if the function is a coroutine (async function)
+        if asyncio.iscoroutinefunction(tool_func):
+            # Run async function in event loop
+            result = asyncio.run(tool_func(**tool_args))
+        else:
+            # Run sync function normally
+            result = tool_func(**tool_args)
+
         return str(result)
     except Exception as e:
         return f"Error executing {tool_name}: {str(e)}"
