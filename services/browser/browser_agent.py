@@ -8,7 +8,7 @@ load_dotenv()
 
 def run_task(task_description):
     """Exécute une tâche avec Browser Use"""
-    browser = Browser(keep_alive=True)
+    browser = Browser()
     agent = Agent(
         task=task_description,
         llm=ChatGoogle(model="gemini-2.5-flash"),
