@@ -44,7 +44,7 @@ system_prompt: |
   Body:
   <message body on several lines>
 
-  IMPORTANT: The body of the message must end with the signature ‘TipsyCib Labs’ (or ‘Best regards, TipsyCib Labs’).
+  IMPORTANT: The body of the message must end with the signature ‘UserKristAlex’ (or ‘Best regards, UserKristAlex’).
   After the draft (OUTSIDE the body), ask this question: ‘Would you like me to send it as is, modify it, or cancel it?’
 
   CASE 2 - The user has NOT yet provided the content (examples: ‘send an email to Marc’, ‘write to Julie’, ‘contact Paul’):
