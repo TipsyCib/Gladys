@@ -23,7 +23,7 @@ load_dotenv(PROJECT_DIR / ".env")
 
 # Mistral API configuration
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY", "")
-MISTRAL_MODEL = "mistral-small-latest"  # Supports function calling
+MISTRAL_MODEL = "magistral-medium-2507"  # Supports function calling
 
 # ElevenLabs API configuration (for text-to-speech)
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
