@@ -188,6 +188,7 @@ sse-starlette==3.0.2
 stack-data==0.6.3
 starlette==0.48.0
 sympy==1.14.0
+tapo==0.8.7
 tenacity==9.1.2
 terminado==0.18.1
 tinycss2==1.4.0
