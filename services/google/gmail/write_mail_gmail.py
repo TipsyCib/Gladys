@@ -16,8 +16,24 @@ def authenticate_gmail():
     token_file = GOOGLE_GMAIL_ACCESS_TOKEN
     credentials_file = GOOGLE_GMAIL_ACCESS_CREDENTIALS
 
+    # Charger les identifiants existants si disponibles
     if os.path.exists(token_file):
-        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
+        try:
+            creds = Credentials.from_authorized_user_file(token_file, SCOPES)
+            print("Utilisation des identifiants existants")
+
+            # Rafraîchir le token s'il est expiré
+            if creds.expired and creds.refresh_token:
+                print("Rafraîchissement du token expiré")
+                creds.refresh(Request())
+                with open(token_file, "w") as token:
+                    token.write(creds.to_json())
+                print("Token rafraîchi avec succès")
+        except Exception as e:
+            print(f"Erreur lors du rafraîchissement du token: {e}")
+            print("Suppression du token invalide et réauthentification...")
+            os.remove(token_file)
+            creds = None
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
